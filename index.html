@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grade Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #f1f5f9; font-family: sans-serif; }
+        .no-select { -webkit-user-select: none; user-select: none; }
+        .document-viewer { background: white; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); overflow: hidden; }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <div id="login-box" class="max-w-md mx-auto mt-20 bg-white p-8 rounded-2xl shadow-2xl">
+        <h1 class="text-2xl font-bold text-center mb-6 text-gray-800">Final Grade Portal</h1>
+        <p class="text-sm text-gray-500 mb-6 text-center">Enter your access code to view your report.</p>
+        <input type="text" id="studentKey" placeholder="Enter Access Code" class="w-full p-4 border rounded-xl mb-4 uppercase outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        <button onclick="checkAccess()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg">View My Report</button>
+        <p id="err" class="text-red-500 text-center mt-4 hidden font-medium">Access Code not found. Please check and try again.</p>
+    </div>
+
+    <div id="portal" class="max-w-4xl mx-auto hidden">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold text-gray-700" id="id-tag"></h2>
+            <button onclick="location.reload()" class="bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:bg-gray-300 transition">Logout</button>
+        </div>
+
+        <div class="document-viewer">
+            <div class="bg-gray-800 p-3 text-white text-center text-sm font-medium">Official Grade Report - View Only</div>
+            <div class="p-4 flex justify-center no-select bg-white">
+                <img id="report-img" src="" class="max-w-full h-auto pointer-events-none shadow-sm" 
+                     oncontextmenu="return false;" 
+                     alt="Student Report">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // FULL LIST OF ACCESS CODES FROM YOUR DATA
+        const validKeys = [
+            "A2024180019", "A2023152512", "B2023152315", "C2024153026", "C2024157503", 
+            "D2024153742", "D2024152452", "D2024151140", "D2024151936", "D2024156554", 
+            "E2024150832", "E2024156750", "G2024156616", "H2023150503", "L2024150122", 
+            "L2024152208", "L2024153715", "L2024156839", "L2024157623", "M2024157184", 
+            "M2024157279", "M2024157193", "N2024157209", "O2023155995", "O2024157341", 
+            "P2024151222", "R2023380005", "S2024156754", "S2024153018", "T2024156871", 
+            "T2023380026", "T2024157240", "V2024157122", "V2024152012"
+        ];
+
+        function checkAccess() {
+            const key = document.getElementById('studentKey').value.trim().toUpperCase();
+            
+            if (validKeys.includes(key)) {
+                document.getElementById('login-box').classList.add('hidden');
+                document.getElementById('portal').classList.remove('hidden');
+                document.getElementById('id-tag').innerText = "Access Code: " + key;
+
+                // Loads the image from your 'reports' folder
+                // CHANGE .png TO .jpg BELOW IF YOUR IMAGES ARE JPEGS
+                const imgElement = document.getElementById('report-img');
+                imgElement.src = `reports/${key}.png`; 
+            } else {
+                const err = document.getElementById('err');
+                err.classList.remove('hidden');
+                setTimeout(() => err.classList.add('hidden'), 3000);
+            }
+        }
+    </script>
+</body>
+</html>
