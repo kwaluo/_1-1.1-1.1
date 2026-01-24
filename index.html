@@ -3,46 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Document Portal</title>
+    <title>Grade Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #f8fafc; font-family: sans-serif; }
+        body { background: #f1f5f9; font-family: sans-serif; }
         .no-select { -webkit-user-select: none; user-select: none; }
-        .report-card { background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
-        /* Prevent image dragging */
-        img { pointer-events: none; }
+        .report-frame { background: white; border-radius: 12px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); overflow: hidden; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
     <div id="login-box" class="max-w-md mx-auto mt-20 bg-white p-8 rounded-2xl shadow-xl">
-        <h1 class="text-2xl font-bold text-center mb-2 text-gray-800">Student Portal</h1>
-        <p class="text-gray-500 text-center mb-6 text-sm">Enter your code to view your report.</p>
-        <input type="text" id="studentKey" placeholder="Access Code" 
-               class="w-full p-4 border border-gray-300 rounded-xl mb-4 uppercase outline-none focus:ring-2 focus:ring-blue-500">
-        <button onclick="checkAccess()" 
-                class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition">
-            View Report
-        </button>
-        <p id="err" class="text-red-500 text-center mt-4 hidden">Invalid Code. Please check and try again.</p>
+        <h1 class="text-2xl font-bold text-center mb-6 text-gray-800">Student Portal</h1>
+        <input type="text" id="studentKey" placeholder="Enter Access Code" class="w-full p-4 border rounded-xl mb-4 uppercase outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        <button onclick="checkAccess()" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition shadow-lg">View Report</button>
+        <p id="err" class="text-red-500 text-center mt-4 hidden font-medium">Access Code not recognized.</p>
     </div>
 
     <div id="portal" class="max-w-4xl mx-auto hidden">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-xl font-bold text-gray-700" id="id-tag"></h2>
-            <button onclick="location.reload()" class="bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-300">Logout</button>
+            <button onclick="location.reload()" class="bg-gray-200 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-300 transition">Logout</button>
         </div>
 
-        <div class="report-card">
-            <div class="bg-gray-800 p-3 text-white text-center text-xs font-bold uppercase tracking-widest">
-                Official Document Viewer - Confidential
-            </div>
-            <div id="img-container" class="p-4 flex justify-center no-select bg-white">
-                <img id="report-img" src="" 
-                     class="max-w-full h-auto" 
-                     oncontextmenu="return false;" 
-                     onerror="handleImageError()"
-                     alt="Grade Report">
+        <div class="report-frame">
+            <div class="bg-gray-800 p-2 text-white text-center text-xs font-bold uppercase tracking-widest">Confidential Grade Report</div>
+            <div class="p-4 flex justify-center no-select bg-white">
+                <img id="report-img" src="" class="max-w-full h-auto pointer-events-none" oncontextmenu="return false;">
             </div>
         </div>
     </div>
@@ -64,24 +51,13 @@
             if (validKeys.includes(key)) {
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('portal').classList.remove('hidden');
-                document.getElementById('id-tag').innerText = "Report for: " + key;
-
-                // Pointing specifically to .jpg files in the reports folder
+                document.getElementById('id-tag').innerText = "Student: " + key;
                 document.getElementById('report-img').src = `reports/${key}.jpg`; 
             } else {
                 const err = document.getElementById('err');
                 err.classList.remove('hidden');
                 setTimeout(() => err.classList.add('hidden'), 3000);
             }
-        }
-
-        function handleImageError() {
-            const container = document.getElementById('img-container');
-            container.innerHTML = `
-                <div class="p-10 text-center text-red-500 font-medium">
-                    <p>Image file not found.</p>
-                    <p class="text-xs text-gray-400 mt-2">Please ensure the file is named correctly in the 'reports' folder.</p>
-                </div>`;
         }
     </script>
 </body>
